@@ -1,5 +1,6 @@
 package com.example.fourthproject.domain.posts;
 
+import com.example.fourthproject.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor // 엔티티 클래스에는 절대 Setter 메소드를 만들지 않는다.
 @Entity // 테이블과 링크될 클래스 // 클래스의 카멜케이스 이름을 스네이크방식으로 매칭
-public class Posts {
+public class Posts extends BaseTimeEntity {
     @Id // 해당 테이블의 PK
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK 생성 규칙
     private Long id;
