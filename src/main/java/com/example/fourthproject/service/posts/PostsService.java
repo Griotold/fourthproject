@@ -2,12 +2,16 @@ package com.example.fourthproject.service.posts;
 
 import com.example.fourthproject.domain.posts.Posts;
 import com.example.fourthproject.domain.posts.PostsRepository;
+import com.example.fourthproject.web.dto.PostsListResponseDto;
 import com.example.fourthproject.web.dto.PostsResponseDto;
 import com.example.fourthproject.web.dto.PostsSaveRequestDto;
 import com.example.fourthproject.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor // Autowired 보다 생성자로 Bean객체를 주입받는 게 좋다.
 @Service
@@ -38,5 +42,11 @@ public class PostsService {
                         IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
         return new PostsResponseDto(entity);
+    }
+    @Transactional(readOnly = true) // 트랜잭션 범위는 유지하되, 조회속도가 개선된다.
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new) // .map(posts -> new PostsListResponseDto(posts))
+                .collect(Collectors.toList());
     }
 }
