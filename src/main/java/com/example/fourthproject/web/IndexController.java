@@ -1,5 +1,6 @@
 package com.example.fourthproject.web;
 
+import com.example.fourthproject.config.auth.dto.SessionUser;
 import com.example.fourthproject.domain.posts.Posts;
 import com.example.fourthproject.service.posts.PostsService;
 import com.example.fourthproject.web.dto.PostsListResponseDto;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Slf4j
@@ -19,11 +21,14 @@ import java.util.List;
 public class IndexController {
 
     private final PostsService postsService;
-    @GetMapping("/") // 첫 화면 불러오기
+    private final HttpSession httpSession;
+    @GetMapping("/")
     public String index(Model model) {
-        List<PostsListResponseDto> posts = postsService.findAllDesc();
-        log.info(posts.toString());
         model.addAttribute("posts", postsService.findAllDesc());
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
         return "index";
     }
 
